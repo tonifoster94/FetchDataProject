@@ -1,0 +1,46 @@
+//When considering average spend from receipts with 'rewardsReceiptStatus’ of ‘Accepted’ or ‘Rejected’, which is greater?
+
+SELECT AVG(totalSpent)
+FROM
+warehouse.db.receipts WDR
+WHERE
+wdr.rewardsReceiptStatus = 'FINISHED'
+
+
+SELECT AVG(totalSpent)
+FROM
+warehouse.db.receipts WDR
+WHERE
+wdr.rewardsReceiptStatus = 'REJECTED'
+
+//When considering total number of items purchased from receipts with 'rewardsReceiptStatus’ of ‘Accepted’ or ‘Rejected’, which is greater?
+
+SELECT SUM(purchasedItemCount)
+FROM
+warehouse.db.receipts WDR
+WHERE
+wdr.rewardsReceiptStatus = 'FINISHED'
+
+SELECT SUM(purchasedItemCount)
+FROM
+warehouse.db.receipts WDR
+WHERE
+wdr.rewardsReceiptStatus = 'REJECTED'
+
+
+//Which brand has the most spend among users who were created within the past 6 months?
+
+SELECT wdb.brand, wdr.totalSpent
+FROM
+warehouse.db.brands wdb
+JOIN
+warehouse.db.receipts wdr
+ON
+wdb.barcode = wdr.barcode
+JOIN
+warehouse.db.users wdu
+ON
+wdu._id = wdr.user_id
+WHERE
+wdu.createdDate_UPDATED between current_date -180 and current_date
+ORDER BY ASC wdr.totalSpent
